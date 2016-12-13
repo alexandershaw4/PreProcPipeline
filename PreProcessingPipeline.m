@@ -3,6 +3,7 @@ classdef PreProcessingPipeline < handle
 % A modular preprocessing pipeline with cluster submission & status
 % tracking
 %
+% Add jobs: obj.add('function');
 %
 
     properties
@@ -187,6 +188,9 @@ classdef PreProcessingPipeline < handle
                                       out =               [p '/feNEWICA_' fn e];
                     case 'DoAverage'; go  = logical(exist([p '/afeNEWICA_' fn e]));
                                       out =               [p '/afeNEWICA_' fn e];
+                    otherwise
+                        go  = 1;
+                        out = [p '/afeNEWICA_' fn e]; 
                 end
             
         end
@@ -195,30 +199,57 @@ classdef PreProcessingPipeline < handle
             
             job  = varargin{1};
             
-            if exist('obj.funcs.MaxFilt'); Jobs{1} = obj.funcs.MaxFilt;
-            else;                          Jobs{1} = 'MaxFilt';
+                
+            % Either use defaults or those specified
+            %-----------------------------------------------------------
+            if isfield(obj.funcs,'MaxFilt'); Jobs{1} = obj.funcs.MaxFilt;
+            else;                            Jobs{1} = 'MaxFilt';
+                                             obj.funcs.MaxFilt = Jobs{1};
             end
-            if exist('obj.funcs.ICA');     Jobs{2} = obj.funcs.ICA;
-            else;                          Jobs{2} = 'FastICA';
+            if isfield(obj.funcs,'ICA');     Jobs{2} = obj.funcs.ICA;
+            else;                            Jobs{2} = 'FastICA';
+                                             obj.funcs.ICA = Jobs{2};
             end            
-            if exist('obj.funcs.Epoch');   Jobs{3} = obj.funcs.Epoch;
-            else;                          Jobs{3} = 'DoEpoch';
+            if isfield(obj.funcs,'Epoch');   Jobs{3} = obj.funcs.Epoch;
+            else;                            Jobs{3} = 'DoEpoch';
+                                             obj.funcs.Epoch = Jobs{3};
             end            
-            if exist('obj.funcs.Filter');  Jobs{4} = obj.funcs.Filter;
-            else;                          Jobs{4} = 'DoFilter';
+            if isfield(obj.funcs,'Filter');  Jobs{4} = obj.funcs.Filter;
+            else;                            Jobs{4} = 'DoFilter';
+                                             obj.funcs.Filter = Jobs{4};
             end            
-            if exist('obj.funcs.Reject');  Jobs{5} = obj.funcs.Reject;
-            else;                          Jobs{5} = 'DoReject';
+            if isfield(obj.funcs,'Reject');  Jobs{5} = obj.funcs.Reject;
+            else;                            Jobs{5} = 'DoReject';
+                                             obj.funcs.Reject = Jobs{5};
             end                        
-            if exist('obj.funcs.Average'); Jobs{6} = obj.funcs.average;
-            else;                          Jobs{6} = 'DoAverage';
-            end                                    
+            if isfield(obj.funcs,'Average'); Jobs{6} = obj.funcs.Average;
+            else;                            Jobs{6} = 'DoAverage';
+                                             obj.funcs.Average = Jobs{6};
+            end   
+            if isfield(obj.funcs,'other')  ; Jobs{7} = obj.funcs.other;
+                                             obj.funcs.(Jobs{7}) = Jobs{7};
+                                             obj.funcs = rmfield(obj.funcs,'other');
+                                             [obj.S(:).(Jobs{7})] = deal(zeros(1,length(obj.S)));
+            end
+            
+
+                
+            
 %             Jobs = {'MaxFilt';
 %                     'FastICA';
 %                     'DoEpoch';
 %                     'DoFilter';
 %                     'DoReject';
 %                     'DoAverage'};
+           additions = fieldnames(obj.funcs);
+           additions = additions(7:end);
+           
+           if ~isempty(additions) && strcmp(job,additions);
+               J           = job;
+               obj.cjob{1} = J;
+               obj.cjob{2} = J;
+               %obj.S.(J)   = zeros(1,length(obj.S));
+           else
            switch job
                case ('MaxFilt'); J = Jobs{1};
                case ('ICA')    ; J = Jobs{2};
@@ -226,11 +257,20 @@ classdef PreProcessingPipeline < handle
                case ('Filter') ; J = Jobs{4};
                case ('Reject') ; J = Jobs{5};
                case ('Average'); J = Jobs{6};
+               case ('other')  ; J = Jobs{end};
            end
            obj.cjob{1} = J;    
            obj.cjob{2} = varargin{1};
                 
+           end
         end
+        
+        
+        function addjob(obj,varargin)
+                obj.funcs.other = varargin{1};
+        end
+        
+        %end
         
         function X = List(varargin)
             X = cat(1,varargin{2:end});

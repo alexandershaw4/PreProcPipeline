@@ -19,8 +19,8 @@ S.D = D;
 
 S.refchan = 'average';
 
-try
+%try
     D = spm_eeg_reref_eeg(S);
-end
+%end
 
 end
