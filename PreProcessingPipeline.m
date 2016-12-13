@@ -1,0 +1,264 @@
+classdef PreProcessingPipeline < handle
+%
+% A modular preprocessing pipeline with cluster submission & status
+% tracking
+%
+%
+
+    properties
+        S
+        Files
+        cjob
+        funcs
+    end
+    
+    
+    
+    
+    methods
+        
+        % The datasets
+        function obj = GetFiles(obj)
+            Files = {...
+            '/imaging/as08/psp_faces/meg10_0002/psp_faces_0002_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0008/faces_PSP_0008_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0008/faces_PSP_0008_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0011/Faces_PSP_0011_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0011/Faces_PSP_0011_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0012/Faces_PSP_0012_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0012/Faces_PSP_0012_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0023/Faces_PSP_0023_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0023/Faces_PSP_0023_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0023/Faces_PSP_0023_3_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0024/Faces_PSP_0024_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0024/Faces_PSP_0024_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0029/Faces_PSP_0029_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0029/Faces_PSP_0029_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0031/Faces_PSP_0031_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0031/Faces_PSP_0031_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0033/Faces_PSP_0033_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0033/Faces_PSP_0033_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0035/Faces_PSP_0035_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0035/Faces_PSP_0035_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0037/Faces_PSP_0037_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0037/Faces_PSP_0037_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0046/Faces_PSP_0046_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0046/Faces_PSP_0046_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0049/Faces_PSP_0049_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0049/Faces_PSP_0049_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0050/Faces_PSP_0050_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0050/Faces_PSP_0050_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0056/Faces_PSP_0056_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0056/Faces_PSP_0056_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0058/Faces_PSP_0058_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0058/Faces_PSP_0058_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0060/Faces_PSP_0060_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0068/Faces_PSP_0068_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0068/Faces_PSP_0068_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0077/Faces_PSP_0077_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0077/Faces_PSP_0077_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0079/Faces_PSP_0079_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0079/Faces_PSP_0079_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0081/Faces_PSP_0081_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0081/Faces_PSP_0081_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0082/Faces_PSP_0082_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0082/Faces_PSP_0082_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0089/Faces_PSP_0089_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0092/Faces_PSP_0092_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0092/Faces_PSP_0092_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0095/Faces_PSP_0095_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0095/Faces_PSP_0095_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0107/Faces_PSP_0107_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0107/Faces_PSP_0107_2_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0119/Faces_PSP_0119_1_raw.fif'...
+            '/imaging/as08/psp_faces/meg10_0119/Faces_PSP_0119_2_raw.fif'};
+            
+            
+        obj.Files = Files;
+        end
+       
+        function DoPaths(obj)
+            addpath(genpath('/home/as08/old_spm12'));
+            addpath('/home/as08/clus/');
+            addpath('/home/as08/Desktop/icameeg/');
+        end
+        
+        
+        
+        function Status(obj)
+            % trans  -> sss == MaxFilter
+            %
+            % NEWICA_spmeeg == ica
+            % eNEWICA_spmee == epoch
+            % feNEWICA_spme == filter
+            % afeNEWICA_spm == artifacts [spm]
+            % mafeNEWICA_sp == robust average & rereference
+            
+            h = pwd;
+            Files = obj.Files;
+            for i = 1:length(Files)
+                f = Files{i};
+                
+                [p,fn,e] = fileparts(f);
+                cd(p);
+                
+                S(i).F       = Files{i};
+                S(i).MaxFilt = [];
+                S(i).ICA     = [];
+                S(i).Epoch   = [];
+                S(i).Filter  = [];
+                S(i).Reject  = [];
+                S(i).Average = [];
+                
+                
+                MF  = 'sss';
+                ICA = 'NEWICA_';
+                EP  = ['e' ICA];
+                FIL = ['f' EP];
+                REJ = ['a' FIL];
+                AVE = ['m' REJ];
+                
+                le = @(x)logical(exist(x));
+                
+                S(i).MaxFilt = le(strrep([fn e],'raw','sss'));
+                
+                if S(i).MaxFilt;
+                    
+                    F = [strrep(fn,'raw','sss') e];
+                    if ~strcmp(F(1:6),'spmeeg')
+                        
+                    
+                        % Raw -> SPM
+                        c = 'spmeeg_';
+                        F = [c F];
+                        F = strrep(F,'fif','mat');
+                        
+                        obj.Files{i} = [p '/' F];
+                    
+                    end
+                    
+                    
+                    S(i).ICA     = le([ICA F]);
+                    S(i).Epoch   = le([EP F]);
+                    S(i).Filter  = le([FIL F]);
+                    S(i).Reject  = le([REJ F]);
+                    S(i).Average = le([AVE F]);
+                end
+                
+            end
+        obj.S = S; 
+        cd(h);
+        end
+        
+        % Engines
+        
+        
+        function Do(obj)
+        % Run jobs - on the cluster
+        
+            job  = obj.cjob{1};
+            TODO = find(~cat(1,obj.S.(obj.cjob{2})));
+            if isempty(TODO);
+                fprintf('%s already run for all datasets\n',job); 
+            else
+                for s = 1:length(TODO)
+                    
+                    FilesIn  = obj.Files{TODO(s)};
+                    [go,fIn] = ready(obj,FilesIn,job);
+                    
+                    if go
+                        fprintf('Dataset %d is ready for %s : submitting\n',s,job);
+                        assignin('base','fIn',fIn);
+                        docluster(job,'fIn');
+                    end
+                end
+            end
+            obj.Status;
+        end
+        
+        function [go,out] = ready(obj,f,job)
+                [p,fn,e] = fileparts(f);
+                switch job
+                    case 'DoEpoch'  ; go  = logical(exist([p '/NEWICA_' fn e]));
+                                      out =               [p '/NEWICA_' fn e];
+                    case 'DoFilter' ; go  = logical(exist([p '/eNEWICA_' fn e]));
+                                      out =               [p '/eNEWICA_' fn e];
+                    case 'DoReject' ; go  = logical(exist([p '/feNEWICA_' fn e]));
+                                      out =               [p '/feNEWICA_' fn e];
+                    case 'DoAverage'; go  = logical(exist([p '/afeNEWICA_' fn e]));
+                                      out =               [p '/afeNEWICA_' fn e];
+                end
+            
+        end
+        
+        function SelectJob(obj,varargin)
+            
+            job  = varargin{1};
+            
+            if exist('obj.funcs.MaxFilt'); Jobs{1} = obj.funcs.MaxFilt;
+            else;                          Jobs{1} = 'MaxFilt';
+            end
+            if exist('obj.funcs.ICA');     Jobs{2} = obj.funcs.ICA;
+            else;                          Jobs{2} = 'FastICA';
+            end            
+            if exist('obj.funcs.Epoch');   Jobs{3} = obj.funcs.Epoch;
+            else;                          Jobs{3} = 'DoEpoch';
+            end            
+            if exist('obj.funcs.Filter');  Jobs{4} = obj.funcs.Filter;
+            else;                          Jobs{4} = 'DoFilter';
+            end            
+            if exist('obj.funcs.Reject');  Jobs{5} = obj.funcs.Reject;
+            else;                          Jobs{5} = 'DoReject';
+            end                        
+            if exist('obj.funcs.Average'); Jobs{6} = obj.funcs.average;
+            else;                          Jobs{6} = 'DoAverage';
+            end                                    
+%             Jobs = {'MaxFilt';
+%                     'FastICA';
+%                     'DoEpoch';
+%                     'DoFilter';
+%                     'DoReject';
+%                     'DoAverage'};
+           switch job
+               case ('MaxFilt'); J = Jobs{1};
+               case ('ICA')    ; J = Jobs{2};
+               case ('Epoch')  ; J = Jobs{3};
+               case ('Filter') ; J = Jobs{4};
+               case ('Reject') ; J = Jobs{5};
+               case ('Average'); J = Jobs{6};
+           end
+           obj.cjob{1} = J;    
+           obj.cjob{2} = varargin{1};
+                
+        end
+        
+        function X = List(varargin)
+            X = cat(1,varargin{2:end});
+        end
+        
+        function overview(obj)
+            
+                X(:,1) = obj.List(obj.S.MaxFilt);
+                X(:,2) = obj.List(obj.S.ICA);
+                X(:,3) = obj.List(obj.S.Epoch);
+                X(:,4) = obj.List(obj.S.Filter);
+                X(:,5) = obj.List(obj.S.Reject);
+                X(:,6) = obj.List(obj.S.Average);
+            imagesc(X);
+            set(gca,'XTick',1:6,'XTickLabel',{'MaxFilt','ICA','Epoch','Filter','Reject','Average'});
+        end
+        
+        function f = fileswitch(obj,varargin)
+            switch varargin{1}
+                case 'ICA'    ; f = strrep(obj.Files,'spm','NEWICA_spm');
+                case 'Epoch'  ; f = strrep(obj.Files,'spm','eNEWICA_spm');
+                case 'Filter' ; f = strrep(obj.Files,'spm','feNEWICA_spm');
+                case 'Reject' ; f = strrep(obj.Files,'spm','afeNEWICA_spm');
+                case 'average'; f = strrep(obj.Files,'spm','mafeNEWICA_spm');  
+            end
+        end
+
+        
+    end
+    
+end
