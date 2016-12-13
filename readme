@@ -1,0 +1,40 @@
+A modular preprocessing [object] pipeline for spm meeg objects.
+
+- Default spm preprocessing + ICA
+- Add any other functions
+- Run everything on cluster 
+- Track each dataset in pipeline
+- Uses spm meg/eeg convensional prepends to mark processing stages
+
+
+To use:
+P = PreProcessingPipeline;
+P.GetFiles;
+P.Status;
+
+
+% Built-in (SPM + custom ICA protocol)
+%-------------------------------------
+
+P.SelectJob('MaxFilter')
+P.SelectJob('ICA')
+P.SelectJob('Epoch')
+P.SelectJob('Filter')
+P.SelectJob('Reject')
+P.SelectJob('Average')
+
+The above will default to spm functions, but can be replaced by doing:
+P.funcs.MaxFilter = 'mymaxfilterfunction';
+P.funcs.ICA       = 'myicafunction';
+
+To run the selected module:
+P.Do
+
+this will submit each of the datasets that does not have this module already run as 
+separate jobs on the cluster by writing out a bash script and qsubbing it
+
+% Add one
+%------------
+P.add('Beamform') where Beamform is a function name
+P.SelectJob('Beamform')
+P.Do
