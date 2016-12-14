@@ -1,4 +1,6 @@
-classdef PreProcessingPipeline < handle
+classdef PreProcessingPipelineOLD < handle
+%
+% OLD: See PreProcessingPipeline2
 %
 % A modular preprocessing pipeline with cluster submission & status
 % tracking
@@ -190,7 +192,7 @@ classdef PreProcessingPipeline < handle
                                       out =               [p '/afeNEWICA_' fn e];
                     otherwise
                         go  = 1;
-                        out = [p '/afeNEWICA_' fn e]; 
+                        out = [p '/af30_90eNEWICA_' fn e]; 
                 end
             
         end
@@ -229,7 +231,7 @@ classdef PreProcessingPipeline < handle
             if isfield(obj.funcs,'other')  ; Jobs{7} = obj.funcs.other;
                                              obj.funcs.(Jobs{7}) = Jobs{7};
                                              obj.funcs = rmfield(obj.funcs,'other');
-                                             [obj.S(:).(Jobs{7})] = deal(zeros(1,length(obj.S)));
+                                             [obj.S(:).(Jobs{7})] = deal(0);%zeros(1,length(obj.S)));
             end
             
 

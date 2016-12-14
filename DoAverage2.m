@@ -1,4 +1,4 @@
-function D = DoAverage(D,varargin)
+function D = DoAverage2(D)
 
 addpath(genpath('/home/as08/old_spm12/'));
 
@@ -9,13 +9,7 @@ S   = [];
 S.D = D;
 
 S.robust = 1;
-
-% if any(varargin{1});
-%     S.prefix = varargin{1};
-% else
-    S.prefix = 'm';
-    try S.prefix = varargin{1}; end
-% end
+S.prefix = 'm';
 
 D = spm_eeg_average(S);
 
