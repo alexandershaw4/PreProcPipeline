@@ -5,7 +5,7 @@ P = PreProcessingPipeline2;
 P.GetFiles;
 
 
-P.addjob({'ICA','FastICA','NEWICA_',''}); % name, function, prepend, to
+P.addjob({'ICA','FastICA','NEWICA_',''}); % name, function, prefix, prevfile
 
 P.addjob({'Epoch','DoEpoch','e','NEWICA_'}); 
 
@@ -29,22 +29,23 @@ P.addjob({'Baseline1','DoBase','b','afeNEWICA_'})
 P.addjob({'Baseline2','DoBase','b','af1_30eNEWICA_'})
 P.addjob({'Baseline3','DoBase','b','af30_90eNEWICA_'})
 
-% Robust average [baselined data]
-P.addjob({'Average4','DoAverage','m','bafeNEWICA_'});
-P.addjob({'Average5','DoAverage','m','baf1_30eNEWICA_'});
-P.addjob({'Average6','DoAverage','m','baf30_90eNEWICA_'});
+% Average face types [pre robust averaging]
+P.addjob({'AveFaceConds1','DoAverageConditionsPreave','w','bafeNEWICA_'});
+P.addjob({'AveFaceConds2','DoAverageConditionsPreave','w','baf1_30eNEWICA_'});
+P.addjob({'AveFaceConds3','DoAverageConditionsPreave','w','baf30_90eNEWICA_'});
 
-% Average face types
-P.addjob({'AveFaces1','DoAverageConditions','w','mbafeNEWICA_'});
-P.addjob({'AveFaces2','DoAverageConditions','w','mbaf1_30eNEWICA_'});
-P.addjob({'AveFaces3','DoAverageConditions','w','mbaf30_90eNEWICA_'});
+% Robust average [baselined data]
+P.addjob({'Average4','DoAverage','m','wbafeNEWICA_'});
+P.addjob({'Average5','DoAverage','m','wbaf1_30eNEWICA_'});
+P.addjob({'Average6','DoAverage','m','wbaf30_90eNEWICA_'});
+
 
 % Run each job [a job for each dataset is submitted to cluster]
 %P.SelectJob(''); P.Do;
 
-P.addjob({'Beamform','Beamform','','wmbafeNEWICA_'});
-P.addjob({'BeamformE','Beamform','','wmbaf1_30eNEWICA'});
-P.addjob({'BeamformG','Beamform','','wmbaf30_90eNEWICA'});
+P.addjob({'Beamform','Beamform','bfm_','wbafeNEWICA_'});
+P.addjob({'BeamformE','Beamform','bfm_','wbaf1_30eNEWICA_'});
+P.addjob({'BeamformG','Beamform','bfm_','wbaf30_90eNEWICA_'});
 
 P.SelectJob('BeamformE');
 P.Do;
