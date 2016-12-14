@@ -34,12 +34,17 @@ P.addjob({'Average4','DoAverage','m','bafeNEWICA_'});
 P.addjob({'Average5','DoAverage','m','baf1_30eNEWICA_'});
 P.addjob({'Average6','DoAverage','m','baf30_90eNEWICA_'});
 
+% Average face types
+P.addjob({'AveFaces1','DoAverageConditions','w','mbafeNEWICA_'});
+P.addjob({'AveFaces2','DoAverageConditions','w','mbaf1_30eNEWICA_'});
+P.addjob({'AveFaces3','DoAverageConditions','w','mbaf30_90eNEWICA_'});
+
 % Run each job [a job for each dataset is submitted to cluster]
 %P.SelectJob(''); P.Do;
 
-P.addjob({'Beamform','Beamform','','mbafeNEWICA_'});
-P.addjob({'BeamformE','Beamform','','mbaf1_30eNEWICA'});
-P.addjob({'BeamformG','Beamform','','mbaf30_90eNEWICA'});
+P.addjob({'Beamform','Beamform','','wmbafeNEWICA_'});
+P.addjob({'BeamformE','Beamform','','wmbaf1_30eNEWICA'});
+P.addjob({'BeamformG','Beamform','','wmbaf30_90eNEWICA'});
 
 P.SelectJob('BeamformE');
 P.Do;

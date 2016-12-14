@@ -156,21 +156,14 @@ classdef PreProcessingPipeline2 < handle
         function fout = fileswitch(obj,varargin)
             name = varargin{1};
             if isfield(obj.funcs,name);
-                for i = 1:length(obj.files)
+                for i = 1:length(obj.Files)
                     f = obj.Files{i};
-                    [p,fn,e] = filepart(f);
+                    [p,fn,e] = fileparts(f);
                     
-                    fout{i} = [p '/' obj.prepend(name) fn e];
+                    fout{i} = [p '/' obj.prepend.(name) obj.prev.(name) fn e];
                 end
             end
             
-%             switch varargin{1}
-%                 case 'ICA'    ; f = strrep(obj.Files,'spm','NEWICA_spm');
-%                 case 'Epoch'  ; f = strrep(obj.Files,'spm','eNEWICA_spm');
-%                 case 'Filter' ; f = strrep(obj.Files,'spm','feNEWICA_spm');
-%                 case 'Reject' ; f = strrep(obj.Files,'spm','afeNEWICA_spm');
-%                 case 'average'; f = strrep(obj.Files,'spm','mafeNEWICA_spm');  
-%             end
         end
 
         
