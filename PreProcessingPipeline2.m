@@ -3,11 +3,30 @@ classdef PreProcessingPipeline2 < handle
 % A modular preprocessing pipeline with cluster submission & status
 % tracking
 %
-% Add jobs: obj.add('name','function','prepend','prevprepend');
+% Add jobs: obj.addjob('name','function','prepend','prevprepend');
 % Run jobs: obj.SelectJob('name'); obj.Do;
 %
 % check status on files in pipeline: obj.Status
 % plot overview of status : obj.overview
+%
+% - Jobs are functions with input being spmeeg object (D) and optnl name
+% - obj.fileswitch('name') returns full filepaths to files with that step
+%
+%
+% Example:
+%
+% P = PreProcessingPipeline2; P.GetFiles;            % Initiate & get files
+%
+% To set a pipeline that does rawfiles -> filter -> epoch -> ica
+%
+% P.addjob({'Filter','DoFilter', 'f'         ,''});  % Filter 
+% P.addjob({'Epoch' ,'DoEpoch2', 'e'        ,'f'});  % Epoch
+% P.addjob({'ICA'   ,'FastICA' , 'NEWICA2_','ef'});  % ICA
+%
+% To select a step and submit jobs to cluster: 
+% P.SelectJob('Filter'); P.Do
+%
+% AS16
 
     properties
         S
@@ -32,9 +51,9 @@ classdef PreProcessingPipeline2 < handle
 
        
         function DoPaths(obj)
-            addpath(genpath('/home/as08/old_spm12'));
-            addpath('/home/as08/clus/');
-            addpath('/home/as08/Desktop/icameeg/');
+            addpath(genpath('/home/as08/old_spm12')); % my SPM
+            addpath('/home/as08/clus/');              % my cluster kit
+            addpath('/home/as08/Desktop/icameeg/');   % my ica kit
         end
         
         
