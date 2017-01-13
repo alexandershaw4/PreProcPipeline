@@ -1,6 +1,6 @@
 function FastICA(f,name)
    
-addpath('/home/as08/Desktop/icameeg/');
-FastICA_MEEG_AS_2(f,[],[],name);
+addpath('/imaging/as08/icameeg-master/');
+FastICA_MEEG_AS_5(f,[],[],name,10);
 
 end
