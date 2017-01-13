@@ -48,6 +48,12 @@ classdef PreProcessingPipeline2 < handle
                    obj.Files = F;
         end
         
+        function obj = SetFiles(obj,varargin)
+           Fe = varargin{1};
+           F  = eval(Fe);
+           obj.Files = F;
+        end
+        
 
        
         function DoPaths(obj)
