@@ -12,7 +12,8 @@ A modular preprocessing [object] pipeline for spm meeg objects.
 
 To start:
 
-P = PreProcessingPipeline; P.GetFiles;
+P = PreProcessingPipeline; 
+P.SetFiles('m_file_with_list_of_spm.mats');
 
 
 To add steps to the pipeline:
@@ -40,7 +41,7 @@ P.Do;
 This checks that the files from the previous steps already exist, and that the new file doesn't already exist (otherwise it skips that dataset).
 Cluster submission is done via qsub and an automatically created bash script, using ClusterMatlabSubmit (see my github).
 
-To see where you;re up to, do:
+To see where you're up to, do:
 
 P.overview
 
