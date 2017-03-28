@@ -1,8 +1,9 @@
-function MaxFilt(f)
+function MaxFilt(f,varargin)
 
 addpath /imaging/local/meg_misc
 addpath /neuro/meg_pd_1.2/
-
+%addpath(genpath('/home/as08/old_spm12/'));
+addpath(genpath('/imaging/local/software/spm_cbu_svn/releases/spm12_latest'));
 
 % sort hpipoints first: [stolen from max000 wiki]
 %----------------------------------------------------
@@ -36,10 +37,9 @@ mf_str  = ['maxfilter -f ',f,...           input
     ' -movecomp ',...                     movement comp
     ' -v | tee ',logfile,...
     ' -format short',...
-    ' -force'];
+    ' -force',...
+    ' -corr 0.9'];
 
 success = ~unix(mf_str);
 
 D = spm_eeg_convert(strrep(f,'raw','sss'));
-
-

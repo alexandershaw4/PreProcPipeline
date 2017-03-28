@@ -50,8 +50,12 @@ classdef PreProcessingPipeline2 < handle
         
         function obj = SetFiles(obj,varargin)
            Fe = varargin{1};
-           F  = eval(Fe);
-           obj.Files = F;
+           if ~iscell(Fe)
+                F  = eval(Fe);
+                obj.Files = F;
+           else
+               obj.Files = Fe(:);
+           end
         end
         
 
