@@ -57,6 +57,18 @@ classdef PreProcessingPipeline2 < handle
                obj.Files = Fe(:);
            end
         end
+        function obj = VerifyFiles(obj);
+            F = obj.Files;
+            l = @(x)logical(exist(x));
+            for i = 1:length(F)
+                if l(F{i}); Y{i} = F{i};
+                else fprintf('Dataset %s missing\n',F{i});
+                end
+            end
+            fprintf('Verification Done\n');
+            Y = Y(~cellfun(@isempty,Y));
+            obj.Files = Y;
+        end
         
 
        
@@ -193,6 +205,15 @@ classdef PreProcessingPipeline2 < handle
                 end
             end
             
+        end
+        
+        % useful extras
+        
+        function pth = getpaths(obj)
+            F = obj.Files;
+            for i = 1:length(F);
+                pth{i} = fileparts(F{i});
+            end
         end
 
         
