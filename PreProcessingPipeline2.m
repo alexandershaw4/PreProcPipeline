@@ -3,7 +3,7 @@ classdef PreProcessingPipeline2 < handle
 % A modular preprocessing pipeline with cluster submission & status
 % tracking
 %
-% Add jobs: obj.addjob('name','function','prepend','prevprepend');
+% Add jobs: obj.addjob('name','function','prefix','prevprefix');
 % Run jobs: obj.SelectJob('name'); obj.Do;
 %
 % check status on files in pipeline: obj.Status
@@ -12,6 +12,8 @@ classdef PreProcessingPipeline2 < handle
 % - Jobs are functions with input being spmeeg object (D) and optnl name
 % - obj.fileswitch('name') returns full filepaths to files with that step
 %
+% - Now also links cluster jobid to each dataset and monitors status
+%   (see obj.jobid, in same order as obj.Files)
 %
 % Example:
 %
@@ -35,6 +37,7 @@ classdef PreProcessingPipeline2 < handle
         funcs
         prepend
         prev
+        jobid
     end
     
     
@@ -69,6 +72,7 @@ classdef PreProcessingPipeline2 < handle
             Y = Y(~cellfun(@isempty,Y));
             obj.Files = Y;
         end
+                    
         
 
        
@@ -130,12 +134,44 @@ classdef PreProcessingPipeline2 < handle
                         prefix = obj.prepend.(obj.cjob{1});
                         assignin('base','fIn',fIn);
                         assignin('base','prefix',prefix);
-                        docluster(job,'fIn','prefix');
+                        %docluster(job,'fIn','prefix');
+                        id = docluster_ret(job,'fIn','prefix');
+                        obj.jobid{TODO(s)} = id;
                     end
                 end
+                
+                fprintf('All jobs submitted... monitoring ... \n');
+                tot_j = length(TODO);
+                cur_j = length(TODO);
+                    while cur_j > 0;
+                        n_c_j = monitorjobs(obj);
+                        if n_c_j < cur_j; obj.overview; 
+                        end
+                        cur_j = n_c_j;
+                        
+                        clc;
+                        fprintf('SUBJECT | STATUS\n');
+                        disp( [num2cell(TODO)' S'] );
+                        drawnow; pause(2);
+                        
+                    end
+                obj.jobid = {};
+                
             end
             obj.Status;
         end
+        
+        function cur_run = monitorjobs(obj)
+                    list = obj.jobid;
+                    for i = 1:length(list);
+                        if ~isempty(list{i});
+                            S{i} = monitorjob(list{i});
+                        end
+                    end
+                    cur_run = length(strmatch('R',S(~cellfun(@isempty,S))));
+        end
+            
+        
         
         function [go,fIn] = ready(obj,FilesIn,job)
                 [p,fn,e]  = fileparts(FilesIn);
@@ -205,15 +241,6 @@ classdef PreProcessingPipeline2 < handle
                 end
             end
             
-        end
-        
-        % useful extras
-        
-        function pth = getpaths(obj)
-            F = obj.Files;
-            for i = 1:length(F);
-                pth{i} = fileparts(F{i});
-            end
         end
 
         
