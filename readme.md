@@ -8,7 +8,7 @@ A modular preprocessing [object] pipeline for spm meeg objects.
 
 
 % Set up a new preprocessing pipeline and apply it
-%---------------------------------------------------
+
 
 To start:
 ```
